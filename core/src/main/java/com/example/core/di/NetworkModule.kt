@@ -1,6 +1,8 @@
 package com.example.core.di
 
 import com.example.core.BuildConfig
+import com.example.core.network.NetworkExceptionMapper
+import com.example.core.network.NetworkExceptionMapperImpl
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -15,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+internal object NetworkModule {
 
     @Provides
     @Singleton
@@ -46,4 +48,10 @@ object NetworkModule {
             ignoreUnknownKeys = true
         }
     }
+
+    @Provides
+    @Singleton
+    fun networkExceptionMapper(
+        implementation: NetworkExceptionMapperImpl
+    ): NetworkExceptionMapper = implementation
 }

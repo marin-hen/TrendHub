@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.serialization)
 }
 
 apply(from = "../config/gradle/build-scripts/android.gradle")
@@ -23,6 +24,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.serialization)
+
     //Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -30,6 +33,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     debugImplementation(libs.androidx.ui.tooling)
+    api(libs.compose.stable.collections)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -37,7 +41,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     // Retrofit
-    implementation(libs.retrofit.core)
+    api(libs.retrofit.core)
     implementation(libs.retrofit.logger)
     implementation(libs.retrofit.convertor)
     implementation(libs.serialization)
