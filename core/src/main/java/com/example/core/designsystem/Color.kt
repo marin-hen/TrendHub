@@ -3,7 +3,7 @@ package com.example.core.designsystem
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.Immutable
 
 val lightColorScheme = AppColors(
     material = lightColorScheme()
@@ -13,8 +13,7 @@ val darkColorScheme = AppColors(
     material = darkColorScheme()
 )
 
-internal val LocalAppColors = staticCompositionLocalOf<AppColors> { error("No AppColors provided") }
-
+@Immutable
 data class AppColors(
     val material: ColorScheme
 )

@@ -47,7 +47,7 @@ internal data class RepositoryDto(
 internal fun RepositoryDto.toDomain(): TrendingRepo {
     return TrendingRepo(
         id = id,
-        name = name,
+        fullName = fullName,
         description = description.orEmpty(),
         language = language.orEmpty(),
         stars = stargazersCount,

@@ -1,19 +1,19 @@
 package com.example.core.designsystem
 
 import androidx.compose.material3.Typography
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-internal val LocalAppTypography = staticCompositionLocalOf { appTypography() }
-
-internal data class AppTypography(
+@Immutable
+data class AppTypography(
     val headlineLarge: TextStyle,
     val headlineMedium: TextStyle,
     val bodyLarge: TextStyle,
-    val bodyMedium: TextStyle
+    val bodyMedium: TextStyle,
+    val bodySmall: TextStyle
 )
 
 internal fun appTypography() = AppTypography(
@@ -37,6 +37,11 @@ internal fun appTypography() = AppTypography(
         fontWeight = FontWeight.Normal,
         fontStyle = FontStyle.Normal,
     ),
+    bodySmall = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal,
+        fontStyle = FontStyle.Normal,
+    )
 )
 
 internal fun materialTypography(
@@ -45,5 +50,6 @@ internal fun materialTypography(
     headlineLarge = appTypography.headlineLarge,
     headlineMedium = appTypography.headlineMedium,
     bodyLarge = appTypography.bodyLarge,
-    bodyMedium = appTypography.bodyMedium
+    bodyMedium = appTypography.bodyMedium,
+    bodySmall = appTypography.bodySmall
 )

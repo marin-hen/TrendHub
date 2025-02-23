@@ -14,12 +14,13 @@ fun TrendHubTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) darkColorScheme else lightColorScheme
-
     val typography = appTypography()
+    val dimens = Dimensions()
 
     CompositionLocalProvider(
         LocalAppColors provides colors,
-        LocalAppTypography provides typography
+        LocalAppTypography provides typography,
+        LocalAppDimens provides dimens
     ) {
         MaterialTheme(
             colorScheme = colors.material,
