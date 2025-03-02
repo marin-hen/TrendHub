@@ -105,7 +105,7 @@ internal class TrendingViewModel @Inject constructor(
         loadRepositories()
     }
 
-    private suspend fun refreshRepositories() {
+    internal suspend fun refreshRepositories() {
         currentPage = INITIAL_PAGE
         update { state ->
             state.refreshing()

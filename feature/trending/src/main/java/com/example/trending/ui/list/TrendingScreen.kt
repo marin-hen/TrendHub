@@ -1,7 +1,6 @@
 package com.example.trending.ui.list
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.FlowRowScopeInstance.weight
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues

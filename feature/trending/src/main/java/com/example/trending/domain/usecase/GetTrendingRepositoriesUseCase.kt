@@ -13,7 +13,7 @@ class GetTrendingRepositoriesUseCase @Inject constructor(
     resolver: ExceptionsResolver,
     private val repository: TrendRepository
 ) : UseCaseWithParam<GetRepositoriesParams, TrendingResponse>(context, resolver) {
-    override suspend fun execute(param: GetRepositoriesParams): TrendingResponse {
+    public override suspend fun execute(param: GetRepositoriesParams): TrendingResponse {
         return repository.getTrendingRepositories(param)
     }
 }
