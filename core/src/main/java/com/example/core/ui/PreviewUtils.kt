@@ -2,7 +2,7 @@ package com.example.core.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.example.core.designsystem.TrendHubTheme
+import com.example.core.designsystem.theme.TrendHubTheme
 import com.example.core.designsystem.ViewState
 import com.example.core.designsystem.ui.LocalResources
 import com.example.core.designsystem.ui.ScreenResources

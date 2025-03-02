@@ -20,6 +20,17 @@ sealed class NetworkException(
         error = error
     )
 
+    class ForbiddenException(
+        message: String?,
+        cause: Throwable?,
+        error: ApiError? = null,
+    ) : NetworkException(
+        code = HttpURLConnection.HTTP_FORBIDDEN,
+        message = message,
+        cause = cause,
+        error = error
+    )
+
     class UnknownException(
         message: String?,
         cause: Throwable?,

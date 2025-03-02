@@ -1,6 +1,7 @@
 package com.example.core.ui
 
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -20,6 +21,7 @@ fun PullToRefreshBox(
     content: @Composable BoxScope.() -> Unit
 ) {
     PullToRefreshBox(
+        modifier = Modifier.fillMaxWidth(),
         state = state,
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,

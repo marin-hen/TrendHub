@@ -31,6 +31,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.compose)
 
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

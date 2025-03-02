@@ -1,4 +1,4 @@
-package com.example.core.designsystem
+package com.example.core.designsystem.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf

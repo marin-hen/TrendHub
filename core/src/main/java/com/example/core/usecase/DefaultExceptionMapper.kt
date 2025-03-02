@@ -1,6 +1,7 @@
 package com.example.core.usecase
 
 import com.example.core.exceptions.NetworkException
+import com.example.core.models.ApiRateLimitExceededException
 import com.example.core.models.ApplicationException
 import com.example.core.models.BusinessException
 import com.example.core.models.NoInternetConnection
@@ -15,12 +16,19 @@ internal class DefaultExceptionMapper @Inject constructor() : ExceptionsMapper {
     override fun map(exception: Throwable): ApplicationException = when {
         exception is BusinessException -> exception
         exception.isNoInternetException() -> NoInternetConnection()
+        exception.isApiRateLimitExceededException() -> ApiRateLimitExceededException(
+            exception.message ?: UNKNOWN_ERROR
+        )
+
         else -> exception.asTechnicalException()
     }
 
     private fun Throwable.isNoInternetException() =
         this is NetworkException.NoInternetConnection || this is NetworkException.TimeOutException
 
+    private fun Throwable.isApiRateLimitExceededException() =
+        this is NetworkException.ForbiddenException
+                && this.message?.contains(API_RATE_LIMIT_EXCEEDED, ignoreCase = true) == true
 
     private fun Throwable.asTechnicalException(): TechnicalException = when (this) {
         is TechnicalException -> this
@@ -48,5 +56,7 @@ internal class DefaultExceptionMapper @Inject constructor() : ExceptionsMapper {
     private companion object {
         const val UNKNOWN_ERROR_CODE = 1000
         const val UNKNOWN_ERROR_MESSAGE = "UNKNOWN_ERROR:"
+        const val UNKNOWN_ERROR = "UNKNOWN_ERROR"
+        const val API_RATE_LIMIT_EXCEEDED = "API rate limit exceeded"
     }
 }

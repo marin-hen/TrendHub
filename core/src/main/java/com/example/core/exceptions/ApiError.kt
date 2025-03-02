@@ -11,6 +11,6 @@ data class ApiError(
 
 @Serializable
 internal data class CommonApiError(
-    @SerialName("errorCode") val errorCode: String,
-    @SerialName("errorDescription") val errorDescription: String,
+    @SerialName("errorCode") val errorCode: String? = null,
+    @SerialName("message") val errorDescription: String,
 )

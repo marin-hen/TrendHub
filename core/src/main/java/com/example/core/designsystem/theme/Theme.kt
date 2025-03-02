@@ -1,4 +1,4 @@
-package com.example.core.designsystem
+package com.example.core.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize

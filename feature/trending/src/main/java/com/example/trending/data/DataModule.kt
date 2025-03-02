@@ -1,6 +1,6 @@
 package com.example.trending.data
 
-import com.example.trending.domain.usecase.TrendingRepository
+import com.example.trending.domain.usecase.TrendRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ internal abstract class DataModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindTrendingRepository(impl: TrendingRepositoryImpl): TrendingRepository
+    abstract fun bindTrendingRepository(impl: TrendingRepositoryImpl): TrendRepository
 }

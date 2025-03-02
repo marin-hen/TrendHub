@@ -1,8 +1,9 @@
 package com.example.trending.data.models
 
-import com.example.trending.domain.models.TrendingRepo
+import com.example.trending.domain.models.TrendingRepository
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 @Serializable
 internal data class RepositoryDto(
@@ -41,19 +42,29 @@ internal data class RepositoryDto(
     @SerialName("default_branch")
     val defaultBranch: String,
     @SerialName("score")
-    val score: Double
+    val score: Double? = null,
+    @SerialName("updated_at")
+    @Serializable(with = InstantSerializer::class)
+    val updatedAt: Instant,
+    @SerialName("created_at")
+    @Serializable(with = InstantSerializer::class)
+    val createdAt: Instant
 )
 
-internal fun RepositoryDto.toDomain(): TrendingRepo {
-    return TrendingRepo(
+internal fun RepositoryDto.toDomain() =
+    TrendingRepository(
         id = id,
+        name = name,
         fullName = fullName,
+        license = license?.name,
         description = description.orEmpty(),
         language = language.orEmpty(),
         stars = stargazersCount,
         watchers = watchersCount,
+        openIssuesCount = openIssuesCount,
         forks = forksCount,
         ownerName = owner.login,
-        ownerAvatarUrl = owner.avatarUrl
+        ownerAvatarUrl = owner.avatarUrl,
+        createdAt = createdAt,
+        updatedAt = updatedAt
     )
-}

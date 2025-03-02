@@ -1,4 +1,4 @@
-package com.example.core.designsystem
+package com.example.core.designsystem.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
@@ -14,6 +14,8 @@ data class Dimensions(
     val size14: Dp = 14.dp,
     val size16: Dp = 16.dp,
     val size24: Dp = 24.dp,
+    val size48: Dp = 48.dp,
+    val size64: Dp = 64.dp,
     val size112: Dp = 112.dp,
     val padding0: Dp = 0.dp,
     val padding2: Dp = 2.dp,

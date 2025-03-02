@@ -26,21 +26,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.core.designsystem.ThemeProvider.dimens
-import com.example.core.designsystem.ThemeProvider.typography
+import com.example.core.designsystem.theme.ThemeProvider.dimens
+import com.example.core.designsystem.theme.ThemeProvider.typography
 import com.example.core.designsystem.ui.currentResources
 import com.example.core.ui.TrendHubPreview
 import com.example.core.ui.shimmerEffect
-import com.example.trending.domain.models.TrendingRepo
+import com.example.trending.domain.models.TrendingRepository
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction
+import java.time.Instant
 
 private const val DEFAULT_MAX_LINES = 1
 
 @Composable
 fun RepositoryCard(
     modifier: Modifier = Modifier,
-    repo: TrendingRepo,
-    onClick: () -> Unit,
+    repo: TrendingRepository,
+    onClick: (String, String) -> Unit,
 ) {
     val res = currentResources<TrendingResources>()
 
@@ -48,7 +49,7 @@ fun RepositoryCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(dimens.size12))
-            .clickable { onClick() }
+            .clickable { onClick(repo.ownerName, repo.name) }
     ) {
         Column(
             modifier = Modifier
@@ -87,7 +88,7 @@ private fun RepositoryDescription(description: String, res: TrendingResources) {
 }
 
 @Composable
-private fun RepositoryStats(repo: TrendingRepo, res: TrendingResources) {
+private fun RepositoryStats(repo: TrendingRepository, res: TrendingResources) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(dimens.size12)
@@ -140,8 +141,9 @@ fun RepositoryCardPreview(state: TrendingState = TrendingState()) {
         state = state
     ) {
         RepositoryCard(
-            repo = TrendingRepo(
+            repo = TrendingRepository(
                 id = 1,
+                name = "deepseek4j",
                 fullName = "pig-mesh/deepseek4j",
                 description = "A simple screen parsing tool towards pure vision based GUI agent",
                 language = "Python",
@@ -149,9 +151,13 @@ fun RepositoryCardPreview(state: TrendingState = TrendingState()) {
                 watchers = 212,
                 forks = 589,
                 ownerName = "FujiwaraChoki",
-                ownerAvatarUrl = "https://avatars.githubusercontent.com/u/68727851?v=4"
+                ownerAvatarUrl = "https://avatars.githubusercontent.com/u/68727851?v=4",
+                license = null,
+                openIssuesCount = 0,
+                createdAt = Instant.now(),
+                updatedAt = Instant.now()
             ),
-            onClick = {},
+            onClick = { _, _ -> },
             modifier = Modifier
         )
     }

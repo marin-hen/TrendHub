@@ -32,9 +32,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
+
     debugImplementation(libs.androidx.ui.tooling)
     api(libs.compose.stable.collections)
-
+    
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)

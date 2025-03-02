@@ -1,5 +1,6 @@
 package com.example.trending.data.models
 
+import com.example.trending.domain.models.TrendingResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,3 +13,9 @@ internal data class TrendingResponseDto(
     @SerialName("items")
     val items: List<RepositoryDto>
 )
+
+internal fun TrendingResponseDto.toDomain() =
+    TrendingResponse(
+        totalCount = totalCount,
+        items = items.map { it.toDomain() }
+    )

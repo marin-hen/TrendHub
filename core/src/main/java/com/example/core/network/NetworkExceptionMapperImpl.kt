@@ -6,10 +6,13 @@ import com.example.core.exceptions.NetworkException
 import com.example.core.exceptions.NetworkException.TimeOutException
 import com.example.core.exceptions.NetworkException.NoInternetConnection
 import com.example.core.exceptions.NetworkException.UnknownException
+import com.example.core.exceptions.NetworkException.ForbiddenException
+import com.example.core.exceptions.NetworkException.InternalErrorException
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.ConnectException
+import java.net.HttpURLConnection.HTTP_FORBIDDEN
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -38,13 +41,12 @@ class NetworkExceptionMapperImpl @Inject constructor(
         val response = exception.response()
         val errorJson = response?.errorBody()?.string()?.takeIf { it.isNotEmpty() }
 
-
         val apiErrorResult = runCatching {
             errorJson?.let {
                 try {
                     with(json.decodeFromString(CommonApiError.serializer(), it)) {
                         ApiError(
-                            errorCode = errorCode,
+                            errorCode = errorCode?:UNKNOWN_ERROR_CODE,
                             errorDescription = errorDescription
                         )
                     }
@@ -70,7 +72,8 @@ class NetworkExceptionMapperImpl @Inject constructor(
 
     private fun Int.handleApiErrors(message: String, cause: Throwable?, apiError: ApiError?) =
         when (this) {
-            HTTP_INTERNAL_ERROR -> NetworkException.InternalErrorException(message, cause, apiError)
+            HTTP_INTERNAL_ERROR -> InternalErrorException(message, cause, apiError)
+            HTTP_FORBIDDEN -> ForbiddenException(message, cause, apiError)
             else -> UnknownException(message, cause, apiError)
         }
 

@@ -7,4 +7,4 @@ import kotlinx.serialization.Serializable
 data object TrendingScreenRoute : BaseRoute
 
 @Serializable
-data class RepoDetailsScreenRoute(val repoId: String) : BaseRoute
+data class RepoDetailsScreenRoute(val owner: String, val name: String) : BaseRoute

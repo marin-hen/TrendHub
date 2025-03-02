@@ -2,4 +2,8 @@
 <resources>
     <string name="title">Trending</string>
     <string name="no_description">No description provided</string>
+    <string name="license">License: %s</string>
+    <string name="language">Language: %s</string>
+    <string name="updated_at">Updated at: %s</string>
+    <string name="created_at">Created at: %s</string>
 </resources>
