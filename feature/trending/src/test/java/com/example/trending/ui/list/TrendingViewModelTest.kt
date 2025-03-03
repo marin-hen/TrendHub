@@ -2,6 +2,7 @@ package com.example.trending.ui.list
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.example.core.datastore.DataStoreManager
 import com.example.trending.domain.models.GetRepositoriesParams
 import com.example.trending.domain.models.TrendingRepository
 import com.example.trending.domain.models.TrendingResponse
@@ -35,6 +36,7 @@ class TrendingViewModelTest {
 
     private lateinit var getTrendingRepositoriesUseCase: GetTrendingRepositoriesUseCase
     private lateinit var trendingNavigationDelegate: TrendingNavigationDelegate
+    private lateinit var dataStoreManager: DataStoreManager
     private lateinit var viewModel: TrendingViewModel
 
     private val dummyRepository = TrendingRepository(
@@ -57,18 +59,25 @@ class TrendingViewModelTest {
         items = listOf(dummyRepository), totalCount = 10
     )
 
+    private fun createTrendingViewModel(): TrendingViewModel {
+        val trendingResources: TrendingResources = mockk(relaxed = true)
+        return TrendingViewModel(
+            resources = trendingResources,
+            savedStateHandle = SavedStateHandle(),
+            getTrendingRepositoriesUseCase = getTrendingRepositoriesUseCase,
+            navDelegate = trendingNavigationDelegate,
+            dataStoreManager = dataStoreManager
+        )
+    }
+
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         getTrendingRepositoriesUseCase = mockk()
         trendingNavigationDelegate = mockk(relaxed = true)
-        val trendingResources: TrendingResources = mockk(relaxed = true)
-        viewModel = TrendingViewModel(
-            resources = trendingResources,
-            savedStateHandle = SavedStateHandle(),
-            getTrendingRepositoriesUseCase = getTrendingRepositoriesUseCase,
-            navDelegate = trendingNavigationDelegate
-        )
+        dataStoreManager = mockk(relaxed = true)
+
+        viewModel = createTrendingViewModel()
 
         coEvery { getTrendingRepositoriesUseCase(any<GetRepositoriesParams>()) } returns Result.success(
             dummyResponse
@@ -83,11 +92,13 @@ class TrendingViewModelTest {
 
     @Test
     fun `initial state should be loading`() = testScope.runTest {
+        val viewModel = createTrendingViewModel()
+
         viewModel.state.test {
             awaitItem()
             val loadingState = awaitItem()
             assertTrue(loadingState.isLoading)
-            cancel()
+            cancelAndConsumeRemainingEvents()
         }
     }
 
