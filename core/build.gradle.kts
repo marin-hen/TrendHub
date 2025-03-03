@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.serialization)
     implementation(libs.okhttp)
 
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
     // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -15,6 +15,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -35,6 +36,7 @@ import com.example.core.ui.currentActionReceiver
 import com.example.trending.domain.models.TrendingRepository
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction.LoadMoreRepositories
+import com.example.trending.ui.list.TrendingViewModel.TrendingAction.OnChangeThemeClicked
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction.RefreshRepositories
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,8 +54,8 @@ fun TrendingScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TrendingScreenContent(state: TrendingState) {
-
     val res = currentResources<TrendingResources>()
+    val action = currentActionReceiver<TrendingAction>()
 
     CompositionLocalProvider(LocalSkeleton provides Skeleton(state.isLoading)) {
         Scaffold(
@@ -66,6 +68,15 @@ private fun TrendingScreenContent(state: TrendingState) {
                         Text(
                             text = res.title.value(),
                             style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    actions = {
+                        Switch(
+                            modifier = Modifier.padding(dimens.padding16),
+                            checked = state.isDarkTheme,
+                            onCheckedChange = { newValue ->
+                                action(OnChangeThemeClicked(newValue))
+                            }
                         )
                     },
                     modifier = Modifier.shadow(
@@ -133,7 +144,7 @@ private fun ScreenContent(state: TrendingState) {
         ) {
             items(
                 items = state.repositories,
-                key = { item -> item.id}
+                key = { item -> item.id }
             ) { repositories ->
                 RepositoryCard(
                     modifier = Modifier

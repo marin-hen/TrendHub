@@ -2,6 +2,8 @@ package com.example.trending.ui.list
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
+import com.example.core.datastore.DataStoreKeys.KEY_DARK_THEME
+import com.example.core.datastore.DataStoreManager
 import com.example.core.designsystem.UiError
 import com.example.core.designsystem.ViewState
 import com.example.core.designsystem.theme.Localizer
@@ -16,6 +18,7 @@ import com.example.trending.ui.delegates.TrendingNavigationDelegate
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction.LoadMoreRepositories
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction.NavigateToDetails
 import com.example.trending.ui.list.TrendingViewModel.TrendingAction.RefreshRepositories
+import com.example.trending.ui.list.TrendingViewModel.TrendingAction.OnChangeThemeClicked
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -27,6 +30,7 @@ data class TrendingState(
     val repositories: ImmutableList<TrendingRepository> = persistentListOf(),
     val isRefreshing: Boolean = false,
     val isLoading: Boolean = false,
+    val isDarkTheme: Boolean = false,
     val uiError: UiError? = null,
 ) : ViewState {
     override fun uiError(): UiError? = uiError
@@ -47,7 +51,8 @@ internal class TrendingViewModel @Inject constructor(
     resources: TrendingResources,
     savedStateHandle: SavedStateHandle,
     val getTrendingRepositoriesUseCase: GetTrendingRepositoriesUseCase,
-    private val navDelegate: TrendingNavigationDelegate
+    private val navDelegate: TrendingNavigationDelegate,
+    private val dataStoreManager: DataStoreManager,
 ) : BaseViewModelWithResources<TrendingState, TrendingViewModel.TrendingAction, TrendingResources>(
     initialState = { TrendingState() },
     savedStateHandle = savedStateHandle,
@@ -58,12 +63,15 @@ internal class TrendingViewModel @Inject constructor(
 
     init {
         launch {
-            update { state ->
-                state.loading()
-            }
-
+            update { it.loading() }
+            loadThemePreference()
             loadRepositories()
         }
+    }
+
+    private suspend fun loadThemePreference() {
+        val savedTheme = dataStoreManager.getBoolean(KEY_DARK_THEME, defaultValue = false)
+        update { state -> state.copy(isDarkTheme = savedTheme) }
     }
 
     private suspend fun loadRepositories() {
@@ -105,11 +113,14 @@ internal class TrendingViewModel @Inject constructor(
         loadRepositories()
     }
 
+    private suspend fun changeTheme(isEnabled: Boolean) {
+        update { state -> state.copy(isDarkTheme = isEnabled) }
+        dataStoreManager.saveBoolean(KEY_DARK_THEME, isEnabled)
+    }
+
     internal suspend fun refreshRepositories() {
         currentPage = INITIAL_PAGE
-        update { state ->
-            state.refreshing()
-        }
+        update { it.refreshing() }
         loadRepositories()
     }
 
@@ -122,6 +133,7 @@ internal class TrendingViewModel @Inject constructor(
 
             RefreshRepositories -> refreshRepositories()
             LoadMoreRepositories -> loadMoreRepositories()
+            is OnChangeThemeClicked -> changeTheme(action.isEnabled)
         }
     }
 
@@ -129,6 +141,7 @@ internal class TrendingViewModel @Inject constructor(
         data class NavigateToDetails(val owner: String, val name: String) : TrendingAction
         data object LoadMoreRepositories : TrendingAction
         data object RefreshRepositories : TrendingAction
+        data class OnChangeThemeClicked(val isEnabled: Boolean) : TrendingAction
     }
 
     private companion object {

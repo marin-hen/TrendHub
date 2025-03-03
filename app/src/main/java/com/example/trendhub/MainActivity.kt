@@ -7,10 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.core.designsystem.ThemePreferenceProvider
 import com.example.core.designsystem.theme.TrendHubTheme
 import com.example.core.di.RootNavigator
 import com.example.core.navigation.NavGraphProvider
@@ -27,11 +30,15 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var rootNavigator: RootNavigator
 
+    @Inject
+    lateinit var themePreferenceProvider: ThemePreferenceProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TrendHubTheme {
+            val darkTheme by themePreferenceProvider.isDarkTheme.collectAsState()
+            TrendHubTheme(darkTheme = darkTheme) {
                 val navController = rememberNavController()
 
                 rootNavigator.navController = navController
